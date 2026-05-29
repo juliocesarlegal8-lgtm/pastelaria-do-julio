@@ -7,19 +7,14 @@ from datetime import datetime
 st.set_page_config(page_title="Pastel do Júlio - Pedidos", page_icon="🥟", layout="wide")
 
 # Estilo visual focado em conversão e usabilidade mobile
-st.markdown(
-    "<style>.main { background-color: #fffdf9; } .stButton>button { width: 100%; border-radius: 8px; font-weight: bold; }</style>",
-    unsafe_allow_html=True)
+st.markdown("<style>.main { background-color: #fffdf9; } .stButton>button { width: 100%; border-radius: 8px; font-weight: bold; }</style>", unsafe_allow_html=True)
 
 # Cabeçalho Oficial com o endereço completo do Trailer Branco
-st.markdown("<h1 style='text-align: center; color: #e67e22; margin-bottom: 0;'>🥟 PASTEL DO JÚLIO</h1>",
-            unsafe_allow_html=True)
-st.markdown(
-    "<p style='text-align: center; font-size: 15px; font-weight: bold; color: #4a3319;'>📍 Retirada: Trailer Branco<br>Morada do Sol, Indaiatuba - SP | CEP: 13348-070</p>",
-    unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #e67e22; margin-bottom: 0;'>🥟 PASTEL DO JÚLIO</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 15px; font-weight: bold; color: #4a3319;'>📍 Retirada: Trailer Branco<br>Morada do Sol, Indaiatuba - SP | CEP: 13348-070</p>", unsafe_allow_html=True)
 st.divider()
 
-# Cardápio completo organizado por categorias
+# Cardápio completo com Hambúrguer Assado e Água de Coco com preços fixos
 cardapio = {
     "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
     "Combinados": {
@@ -35,11 +30,15 @@ cardapio = {
         "O Fenomenal (O Rei)": 26.00, "Imperial de Carne": 25.00, "Super Frangresa": 23.00,
         "Misto Cremoso": 22.00, "Misto do Júlio": 22.00
     },
+    "Hambúrgueres": {
+        "Hambúrguer Assado": 9.00
+    },
     "Bebidas": {
-        "Caldo de Cana (Copo 500ml)": 10.00,
+        "Caldo de Cana (Copo 500ml)": 10.00, 
         "Caldo de Cana (Copo 770ml)": 14.00,
-        "Caldo de Cana (Garrafa 500ml)": 11.00,
-        "Caldo de Cana (Garrafa 1 Litro)": 21.00
+        "Caldo de Cana (Garrafa 500ml)": 11.00, 
+        "Caldo de Cana (Garrafa 1 Litro)": 21.00,
+        "Água de Coco": 10.00
     }
 }
 
@@ -47,7 +46,6 @@ if "carrinho" not in st.session_state:
     st.session_state.carrinho = {}
 if "ticket_gerado" not in st.session_state:
     st.session_state.ticket_gerado = None
-
 
 # FUNÇÃO QUE FAZ O ENVIO DIRETO PARA O SEU GMAIL UTILIZANDO SUA API KEY DO RESEND
 def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_busca, itens_sacola, total_pagar):
@@ -57,13 +55,12 @@ def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_bus
     for produto, quantidade in itens_sacola.items():
         lista_formatada += f"• {quantidade}x {produto}<br>"
 
-    # Estrutura do e-mail com o WhatsApp do cliente em destaque [1]
     corpo_html = f"""
     <h3>🔥 NOVO PEDIDO CHEGOU - PASTEL DO JÚLIO 🔥</h3>
     <p>--------------------------------------------------</p>
     <p><strong>🎟️ TICKET DO CLIENTE:</strong> #{num_ticket}</p>
     <p><strong>👤 NOME DO CLIENTE:</strong> {nome_cli}</p>
-    <p><strong>📱 WHATSAPP DO CLIENTE (Obrigatório):</strong> {whats_cli}</p>
+    <p><strong>📱 WHATSAPP DO CLIENTE:</strong> {whats_cli}</p>
     <p><strong>✉️ E-MAIL DO CLIENTE:</strong> {email_cli}</p>
     <p><strong>⏰ HORÁRIO DE RETIRADA NO TRAILER:</strong> {hora_busca}h</p>
     <p>--------------------------------------------------</p>
@@ -85,13 +82,12 @@ def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_bus
         print(f"Erro no envio da API do Resend: {e}")
         return False
 
-
 # Organização da tela do sistema em 2 colunas principais
 col_cardapio, col_carrinho = st.columns(2)
 
 with col_cardapio:
     st.subheader("🛒 Monte seu Pedido")
-
+    
     with st.expander("1) Pastéis Tradicionais - R$ 14,00"):
         for nome in cardapio["Tradicionais"]:
             c1, c2 = st.columns(2)
@@ -127,7 +123,16 @@ with col_cardapio:
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
-    with st.expander("🥤 Bebidas (Caldo de Cana)"):
+    with st.expander("🍔 Hambúrgueres"):
+        for nome, preco in cardapio["Hambúrgueres"].items():
+            c1, c2 = st.columns(2)
+            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
+            c1.write(f"**{nome}** — {texto_preco}")
+            if c2.button("Adicionar", key=f"burguer_{nome}"):
+                st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
+                st.rerun()
+
+    with st.expander("🥤 Bebidas"):
         for nome, preco in cardapio["Bebidas"].items():
             c1, c2 = st.columns(2)
             texto_preco = f"R$ {preco:.2f}".replace('.', ',')
@@ -138,16 +143,15 @@ with col_cardapio:
 
 with col_carrinho:
     st.subheader("🛍️ Dados da Retirada")
-
+    
     nome_cliente = st.text_input("Seu Nome:", placeholder="Ex: João Silva")
-    whats_cliente = st.text_input("Seu WhatsApp com DDD (Obrigatório):",
-                                  placeholder="Ex: 19998386177")  # RETORNOU COMO OBRIGATÓRIO [1]
+    whats_cliente = st.text_input("Seu WhatsApp com DDD (Obrigatório):", placeholder="Ex: 19999999999")
     email_cliente = st.text_input("Seu E-mail:", placeholder="Ex: cliente@email.com")
     horario_busca = st.time_input("Horário programado para buscar no Trailer:", value=datetime.now().time())
-
+    
     st.divider()
     st.write("### 📋 Resumo da Sacola")
-
+    
     if not st.session_state.carrinho:
         st.info("Adicione os itens desejados no menu ao lado.")
         total_geral = 0.0
@@ -155,21 +159,18 @@ with col_carrinho:
         total_geral = 0.0
         for nome_item, qtd in list(st.session_state.carrinho.items()):
             preco_item = 14.00
-            if nome_item in cardapio["Combinados"]:
-                preco_item = cardapio["Combinados"][nome_item]
-            elif nome_item in cardapio["Especiais"]:
-                preco_item = cardapio["Especiais"][nome_item]
-            elif nome_item in cardapio["Imperiais"]:
-                preco_item = cardapio["Imperiais"][nome_item]
-            elif nome_item in cardapio["Bebidas"]:
-                preco_item = cardapio["Bebidas"][nome_item]
-
+            if nome_item in cardapio["Combinados"]: preco_item = cardapio["Combinados"][nome_item]
+            elif nome_item in cardapio["Especiais"]: preco_item = cardapio["Especiais"][nome_item]
+            elif nome_item in cardapio["Imperiais"]: preco_item = cardapio["Imperiais"][nome_item]
+            elif nome_item in cardapio["Hambúrgueres"]: preco_item = cardapio["Hambúrgueres"][nome_item]
+            elif nome_item in cardapio["Bebidas"]: preco_item = cardapio["Bebidas"][nome_item]
+            
             subtotal = preco_item * qtd
             total_geral += subtotal
             st.write(f"**{qtd}x** {nome_item} — R$ {subtotal:.2f}".replace('.', ','))
-
+        
         st.markdown(f"#### **Total: R$ {total_geral:.2f}**".replace('.', ','))
-
+        
         if st.button("Limpar Sacola", type="secondary"):
             st.session_state.carrinho = {}
             st.session_state.ticket_gerado = None
@@ -179,17 +180,15 @@ with col_carrinho:
             if not nome_cliente.strip():
                 st.error("⚠️ Por favor, digite seu nome!")
             elif not whats_cliente.strip() or len(whats_cliente) < 10:
-                st.error("⚠️ Por favor, digite um número de WhatsApp válido com DDD!")  # BLOQUEIA SE NÃO DIGITAR [1]
+                st.error("⚠️ Por favor, digite seu WhatsApp de contato com DDD!")
             elif not email_cliente.strip() or "@" not in email_cliente:
                 st.error("⚠️ Por favor, digite um e-mail válido!")
             else:
                 numero_ticket = random.randint(100, 999)
                 hora_formatada = horario_busca.strftime("%H:%M")
-
-                # Dispara o e-mail incluindo o WhatsApp capturado
-                disparar_email_producao(numero_ticket, nome_cliente, whats_cliente, email_cliente, hora_formatada,
-                                        st.session_state.carrinho, total_geral)
-
+                
+                disparar_email_producao(numero_ticket, nome_cliente, whats_cliente, email_cliente, hora_formatada, st.session_state.carrinho, total_geral)
+                
                 st.session_state.ticket_gerado = {
                     "numero": numero_ticket,
                     "cliente": nome_cliente,
@@ -198,7 +197,7 @@ with col_carrinho:
                     "hora": hora_formatada,
                     "total": total_geral
                 }
-
+                
                 st.session_state.carrinho = {}
                 st.rerun()
 
@@ -206,15 +205,11 @@ with col_carrinho:
 if st.session_state.ticket_gerado:
     st.divider()
     t = st.session_state.ticket_gerado
-
+    
     st.subheader("🎟️ SEU PEDIDO FOI ENVIADO!")
     st.info("Número do Ticket: #" + str(t['numero']))
     st.write("**Cliente:** " + t['cliente'])
-    st.write("**WhatsApp Informado:** " + t['whats'])
+    st.write("**WhatsApp do Cliente:** " + t['whats'])
+    st.write("**E-mail do Cliente:** " + t['email'])
     st.write("**Horário agendado:** " + t['hora'] + "h")
-
-    texto_preco_total = f"R$ {t['total']:.2f}".replace('.', ',')
-    st.write("**Total a pagar:** " + texto_preco_total)
-
-    st.warning("📍 Retirada no Trailer Branco: Morada do Sol, Indaiatuba - SP, 13348-070")
-    st.success("✓ Sucesso! O seu pedido já foi processado e enviado para o e-mail de produção da pastelaria!")
+    
