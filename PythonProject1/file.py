@@ -3,33 +3,144 @@ import random
 import resend
 from datetime import datetime
 
-# Configuração da página (Design Mobile / Responsivo)
-st.set_page_config(page_title="Pastel do Júlio - Pedidos", page_icon="🥟", layout="wide")
-
-# Estilo visual focado em conversão e usabilidade mobile
-st.markdown("<style>.main { background-color: #fffdf9; } .stButton>button { width: 100%; border-radius: 8px; font-weight: bold; }</style>", unsafe_allow_html=True)
-
-# Cabeçalho Oficial com o endereço completo do Trailer Branco
-st.markdown("<h1 style='text-align: center; color: #e67e22; margin-bottom: 0;'>🥟 PASTEL DO JÚLIO</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 15px; font-weight: bold; color: #4a3319;'>📍 Retirada: Trailer Branco<br>Morada do Sol, Indaiatuba - SP | CEP: 13348-070</p>", unsafe_allow_html=True)
-st.divider()
+# Configuração da página (Design Mobile Premium / Responsivo)
+st.set_page_config(page_title="Pastel do Júlio - Premium", page_icon="🥟", layout="wide")
 
 # =========================================================================
-# 💰 INFORMAÇÕES DE PAGAMENTO E REGRAS DE TEMPO LIMEITE
+# 🎨 ARQUITETURA DE DESIGN PREMIUM (CSS CUSTOMIZADO)
 # =========================================================================
-st.sidebar.markdown("### 💰 Regras de Pagamento")
-st.sidebar.warning("⚠️ **PEDIDOS PARA RETIRADA:** O pagamento deve ser feito obrigatoriamente via **PIX** após gerar o seu Ticket.")
-st.sidebar.error("⏱️ **ATENÇÃO:** O pagamento via PIX é válido por até **5 minutos**. Caso o pagamento não seja confirmado dentro desse prazo, o pedido será **cancelado automaticamente**.")
-st.sidebar.info("""
-**Chave PIX (Celular):** 
-`19991692630`
-**Nome do Cobrador:** 
-Marcos Prado
-""")
-st.sidebar.success("💵 **Dinheiro e Débito:** Aceitos somente para compras feitas presencialmente no Trailer Branco.")
-# =========================================================================
+st.markdown("""
+    <style>
+    /* Fundo geral da aplicação */
+    .stApp {
+        background-color: #0d0d0d !important;
+        color: #f2f2f2 !important;
+    }
+    
+    /* Customização dos Títulos */
+    h1, h2, h3, h4 {
+        font-family: 'Playfair Display', 'Georgia', serif !important;
+        letter-spacing: 1px;
+    }
+    
+    /* Caixa de Alerta de Erro/Aviso Customizada */
+    .stAlert {
+        background-color: #1a1510 !important;
+        color: #e6b800 !important;
+        border: 1px solid #bd9313 !important;
+        border-radius: 12px !important;
+    }
+    
+    /* Inputs de Texto Premium */
+    .stTextInput>div>div>input {
+        background-color: #141414 !important;
+        color: #ffffff !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
+    }
+    .stTextInput>div>div>input:focus {
+        border-color: #d4af37 !important;
+        box-shadow: 0 0 8px rgba(212, 175, 55, 0.4) !important;
+    }
 
-# Cardápio completo
+    /* Botão Principal Dourado (Confirmar) */
+    .stButton>button[kind="primary"] {
+        background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
+        color: #000000 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2) !important;
+        transition: all 0.3s ease !important;
+        width: 100%;
+    }
+    .stButton>button[kind="primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+    }
+
+    /* Botão Secundário (Adicionar e Limpar) */
+    .stButton>button[kind="secondary"] {
+        background-color: #191919 !important;
+        color: #d4af37 !important;
+        border: 1px solid #aa7c11 !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+        width: 100%;
+    }
+    .stButton>button[kind="secondary"]:hover {
+        background-color: #d4af37 !important;
+        color: #000000 !important;
+    }
+
+    /* Estilização dos Menus Retráteis (Expanders) */
+    .streamlit-expanderHeader {
+        background-color: #141414 !important;
+        border: 1px solid #262626 !important;
+        border-radius: 8px !important;
+        color: #e6e6e6 !important;
+        font-weight: 600 !important;
+    }
+    .streamlit-expanderContent {
+        background-color: #0d0d0d !important;
+        border-left: 1px solid #aa7c11 !important;
+        border-right: 1px solid #262626 !important;
+        border-bottom: 1px solid #262626 !important;
+        border-bottom-left-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
+    }
+
+    /* Caixa do Ticket de Alta Linha */
+    .ticket-premium { 
+        background: linear-gradient(145deg, #14110c 0%, #0d0b08 100%);
+        color: #f2f2f2; 
+        padding: 30px; 
+        border-radius: 16px; 
+        text-align: center; 
+        border: 1px solid #aa7c11;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        margin-top: 20px;
+    }
+    .ticket-header {
+        color: #d4af37 !important;
+        font-size: 22px !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Cabeçalho de Luxo
+st.markdown("<h1 style='text-align: center; color: #d4af37; font-size: 3rem; margin-bottom: 0; font-weight: 800;'>PASTEL DO JÚLIO</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 14px; letter-spacing: 2px; color: #8c8c8c; text-transform: uppercase;'>Experiência Gastronômica Artesanal</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 15px; color: #aa7c11;'>📍 Retirada Exclusiva: Trailer Branco — Morada do Sol, Indaiatuba - SP</p>", unsafe_allow_html=True)
+st.markdown("<div style='border-bottom: 1px solid #aa7c11; margin: 20px 0;'></div>", unsafe_allow_html=True)
+
+# =========================================================================
+# 💰 INFORMAÇÕES DE PAGAMENTO NA BARRA LATERAL
+# =========================================================================
+st.sidebar.markdown("<h3 style='color: #d4af37;'>Políticas de Pagamento</h3>", unsafe_allow_html=True)
+st.sidebar.markdown("""
+<div style='background-color: #141414; padding: 15px; border-radius: 8px; border-left: 3px solid #d4af37; font-size: 14px;'>
+<b style='color: #ffffff;'>📱 Retiradas Agendadas:</b><br>
+Aceitas exclusivamente via <b>PIX</b> de forma antecipada.<br><br>
+<b style='color: #ea2027;'>⏱️ Prazo de Tolerância:</b><br>
+O PIX deve ser efetuado em até <b>5 minutos</b> após o pedido, ou a reserva será desconsiderada.<br><br>
+<b style='color: #ffffff;'>🤝 Compra Presencial:</b><br>
+Dinheiro e cartões de débito são aceitos apenas diretamente no balcão do Trailer.
+</div>
+""", unsafe_allow_html=True)
+
+st.sidebar.markdown("<br>", unsafe_allow_html=True)
+st.sidebar.markdown("<h4 style='color: #aa7c11; margin-bottom:5px;'>Dados para Depósito</h4>", unsafe_allow_html=True)
+st.sidebar.code("Chave PIX: 19991692630\nFavorecido: Marcos Prado", language="text")
+
+# Cardápio completo premium
 cardapio = {
     "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
     "Combinados": {
@@ -101,107 +212,24 @@ def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_bus
 col_cardapio, col_carrinho = st.columns(2)
 
 with col_cardapio:
-    st.subheader("🛒 Monte seu Pedido")
+    st.markdown("<h3 style='color: #d4af37;'>✨ Cardápio Exclusivo</h3>", unsafe_allow_html=True)
     
-    with st.expander("1) Pastéis Tradicionais - R$ 14,00"):
+    with st.expander("👑 1) Pastéis Tradicionais - R$ 14,00"):
         for nome in cardapio["Tradicionais"]:
-            c1, c2 = st.columns(2)
+            c1, c2 = st.columns([3, 1])
             c1.write(f"**{nome}**")
-            if c2.button("Adicionar", key=f"simples_{nome}"):
+            if c2.button("Selec.", key=f"simples_{nome}", kind="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
-    with st.expander("2) Pastéis Combinados"):
+    with st.expander("🌟 2) Pastéis Combinados"):
         for nome, preco in cardapio["Combinados"].items():
-            c1, c2 = st.columns(2)
+            c1, c2 = st.columns([3, 1])
             texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — {texto_preco}")
-            if c2.button("Adicionar", key=f"comb_{nome}"):
+            c1.write(f"**{nome}** — <span style='color:#d4af37;'>{texto_preco}</span>", unsafe_allow_html=True)
+            if c2.button("Selec.", key=f"comb_{nome}", kind="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
-    with st.expander("3) Pastéis Especiais"):
+    with st.expander("💎 3) Pastéis Especiais"):
         for nome, preco in cardapio["Especiais"].items():
-            c1, c2 = st.columns(2)
-            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — {texto_preco}")
-            if c2.button("Adicionar", key=f"esp_{nome}"):
-                st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
-                st.rerun()
-
-    with st.expander("4) Pastéis Imperiais (Os Gigantes)"):
-        for nome, preco in cardapio["Imperiais"].items():
-            c1, c2 = st.columns(2)
-            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — {texto_preco}")
-            if c2.button("Adicionar", key=f"imp_{nome}"):
-                st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
-                st.rerun()
-
-    with st.expander("🍔 Hambúrgueres"):
-        for nome, preco in cardapio["Hambúrgueres"].items():
-            c1, c2 = st.columns(2)
-            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — {texto_preco}")
-            if c2.button("Adicionar", key=f"burguer_{nome}"):
-                st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
-                st.rerun()
-
-    with st.expander("🥤 Bebidas"):
-        for nome, preco in cardapio["Bebidas"].items():
-            c1, c2 = st.columns(2)
-            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — {texto_preco}")
-            if c2.button("Adicionar", key=f"beb_{nome}"):
-                st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
-                st.rerun()
-
-with col_carrinho:
-    st.subheader("🛍️ Dados da Retirada")
-    
-    # Alerta móvel reforçado com o tempo limite
-    st.error("⚠️ **Aviso Importante:** Pedidos para retirada aceitam apenas **PIX**. O pagamento deve ser feito em até **5 minutos** ou o pedido será cancelado.")
-    
-    nome_cliente = st.text_input("Seu Nome:", placeholder="Ex: João Silva")
-    whats_cliente = st.text_input("Seu WhatsApp com DDD (Obrigatório):", placeholder="Ex: 19999999999")
-    email_cliente = st.text_input("Seu E-mail:", placeholder="Ex: cliente@email.com")
-    horario_busca = st.time_input("Horário programado para buscar no Trailer:", value=datetime.now().time())
-    
-    st.divider()
-    st.write("### 📋 Resumo da Sacola")
-    
-    if not st.session_state.carrinho:
-        st.info("Adicione os itens desejados no menu ao lado.")
-        total_geral = 0.0
-    else:
-        total_geral = 0.0
-        for nome_item, qtd in list(st.session_state.carrinho.items()):
-            preco_item = 14.00
-            if nome_item in cardapio["Combinados"]: preco_item = cardapio["Combinados"][nome_item]
-            elif nome_item in cardapio["Especiais"]: preco_item = cardapio["Especiais"][nome_item]
-            elif nome_item in cardapio["Imperiais"]: preco_item = cardapio["Imperiais"][nome_item]
-            elif nome_item in cardapio["Hambúrgueres"]: preco_item = cardapio["Hambúrgueres"][nome_item]
-            elif nome_item in cardapio["Bebidas"]: preco_item = cardapio["Bebidas"][nome_item]
-            
-            subtotal = preco_item * qtd
-            total_geral += subtotal
-            st.write(f"**{qtd}x** {nome_item} — R$ {subtotal:.2f}".replace('.', ','))
-        
-        st.markdown(f"#### **Total: R$ {total_geral:.2f}**".replace('.', ','))
-        
-        if st.button("Limpar Sacola", type="secondary"):
-            st.session_state.carrinho = {}
-            st.session_state.ticket_gerado = None
-            st.rerun()
-
-        if st.button("Finalizar Pedido e Gerar Ticket 🚀", type="primary"):
-            if not nome_cliente.strip():
-                st.error("⚠️ Por favor, digite seu nome!")
-            elif not whats_cliente.strip() or len(whats_cliente) < 10:
-                st.error("⚠️ Por favor, digite seu WhatsApp de contato com DDD!")
-            elif not email_cliente.strip() or "@" not in email_cliente:
-                st.error("⚠️ Por favor, digite um e-mail válido!")
-            else:
-                numero_ticket = random.randint(100, 999)
-                hora_formatada = horario_busca.strftime("%H:%M")
-                
