@@ -142,32 +142,15 @@ Dinheiro e Débito somente no balcão presencial do Trailer.
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 st.sidebar.code("CHAVE PIX (CELULAR):\n19991692630\n\nFAVORECIDO:\nMarcos Prado", language="text")
 
-# 📋 CARDÁPIO RECONSTITUÍDO COM TODOS OS ITENS COMPLETOS SEM CORTES
-cardapio = {
-    "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
-    "Combinados": {
-        "Carne com Queijo": 17.00, "Frango com Requeijão": 16.00, "Calabresa com Queijo": 16.00,
-        "Presunto e Queijo": 16.00, "Cheddar com Carne": 17.00, "Cheddar com Frango": 16.00
-    },
-    "Especiais": {
-        "Cheddar com Frango e Requeijão": 19.00, "Calabresa com Cheddar": 18.00, "Especial Queijo e Presunto": 20.00,
-        "Mega Queijo (4 Fatias)": 20.00, "Carne com Cheddar e Requeijão": 19.00, "Calabresa Suprema": 18.00,
-        "A Moda do Júlio": 22.00, "Bomba de Frango": 22.00
-    },
-    "Imperiais": {
-        "O Fenomenal (O Rei)": 26.00, "Imperial de Carne": 25.00, "Super Frangresa": 23.00,
-        "Misto Cremoso": 22.00, "Misto do Júlio": 22.00
-    },
-    "Hambúrgueres": {
-        "Hambúrguer Assado": 9.00
-    },
-    "Bebidas": {
-        "Caldo de Cana (Copo 500ml)": 10.00, 
-        "Caldo de Cana (Copo 770ml)": 14.00,
-        "Caldo de Cana (Garrafa 500ml)": 11.00, 
-        "Caldo de Cana (Garrafa 1 Litro)": 21.00,
-        "Água de Coco": 10.00
-    }
+# Dicionário de Preços para a Sacola
+precos_itens = {
+    "Queijo": 14.00, "Carne": 14.00, "Frango": 14.00, "Cheddar": 14.00, "Calabresa": 14.00,
+    "Carne com Queijo": 17.00, "Frango com Requeijão": 16.00, "Calabresa com Queijo": 16.00, "Presunto e Queijo": 16.00, "Cheddar com Carne": 17.00, "Cheddar com Frango": 16.00,
+    "Cheddar com Frango e Requeijão": 19.00, "Calabresa com Cheddar": 18.00, "Especial Queijo e Presunto": 20.00, "Mega Queijo (4 Fatias)": 20.00, "Carne com Cheddar e Requeijão": 19.00, "Calabresa Suprema": 18.00, "A Moda do Júlio": 22.00, "Bomba de Frango": 22.00,
+    "O Fenomenal (O Rei)": 26.00, "Imperial de Carne": 25.00, "Super Frangresa": 23.00, "Misto Cremoso": 22.00, "Misto do Júlio": 22.00,
+    "Hambúrguer Assado": 9.00,
+    "Caldo de Cana (Copo 500ml)": 10.00, "Caldo de Cana (Copo 770ml)": 14.00, "Caldo de Cana (Garrafa 500ml)": 11.00, "Caldo de Cana (Garrafa 1 Litro)": 21.00,
+    "Água de Coco": 10.00
 }
 
 if "carrinho" not in st.session_state:
@@ -178,7 +161,6 @@ if "ticket_gerado" not in st.session_state:
 # FUNÇÃO QUE FAZ O ENVIO DIRETO PARA O SEU GMAIL UTILIZANDO SUA API KEY DO RESEND
 def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_busca, itens_sacola, total_pagar):
     resend.api_key = "re_gRHuzJpe_EybdTWWETWpKh2bGSB4qBUrE"
-
     lista_formatada = ""
     for produto, quantidade in itens_sacola.items():
         lista_formatada += f"• {quantidade}x {produto}<br>"
@@ -197,7 +179,6 @@ def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_bus
     <p><strong>💰 TOTAL A COBRAR:</strong> R$ {total_pagar:.2f} (Aguardando PIX)</p>
     <p>📍 <strong>LOCAL:</strong> Trailer Branco (Morada do Sol, Indaiatuba - SP)</p>
     """
-
     try:
         resend.Emails.send({
             "from": "Pastelaria do Julio <onboarding@resend.dev>",
@@ -216,21 +197,25 @@ col_cardapio, col_carrinho = st.columns(2)
 with col_cardapio:
     st.markdown("<h3>⚡ SELECIONE OS SABORES</h3>", unsafe_allow_html=True)
     
+    # Categoria 1
     with st.expander("🟢 1) Pastéis Tradicionais - R$ 14,00"):
-        for nome in cardapio["Tradicionais"]:
+        for nome in ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"]:
             c1, c2 = st.columns(2)
             c1.write(f"**{nome}**")
             if c2.button("+ Add", key=f"simples_{nome}", type="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
+    # Categoria 2
     with st.expander("🟢 2) Pastéis Combinados"):
-        for nome, preco in cardapio["Combinados"].items():
+        comb_lista = ["Carne com Queijo", "Frango com Requeijão", "Calabresa com Queijo", "Presunto e Queijo", "Cheddar com Carne", "Cheddar com Frango"]
+        for nome in comb_lista:
             c1, c2 = st.columns(2)
-            texto_preco = f"R$ {preco:.2f}".replace('.', ',')
-            c1.write(f"**{nome}** — <span style='color:#00ff66;'>{texto_preco}</span>", unsafe_allow_html=True)
+            texto_p = f"R$ {precos_itens[nome]:.2f}".replace('.', ',')
+            c1.write(f"**{nome}** — <span style='color:#00ff66;'>{texto_p}</span>", unsafe_allow_html=True)
             if c2.button("+ Add", key=f"comb_{nome}", type="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
+    # Categoria 3
     with st.expander("🟢 3) Pastéis Especiais"):
