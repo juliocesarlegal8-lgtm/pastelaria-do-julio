@@ -4,7 +4,7 @@ import resend
 from datetime import datetime
 
 # Configuração da página (Design Mobile / Responsivo)
-st.set_page_config(page_title="Pastel do Júlio - Pedidos", page_icon="🥟", layout="wide")
+st.set_page_config(page_title="Pastel do Júlio & MarcosCaldodeCana - Pedidos", page_icon="🥟", layout="wide")
 
 # Estilo visual focado em conversão e usabilidade mobile
 st.markdown("<style>.main { background-color: #fffdf9; } .stButton>button { width: 100%; border-radius: 8px; font-weight: bold; }</style>", unsafe_allow_html=True)
