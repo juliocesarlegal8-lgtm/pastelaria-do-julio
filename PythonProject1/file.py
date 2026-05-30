@@ -14,7 +14,22 @@ st.markdown("<h1 style='text-align: center; color: #e67e22; margin-bottom: 0;'>�
 st.markdown("<p style='text-align: center; font-size: 15px; font-weight: bold; color: #4a3319;'>📍 Retirada: Trailer Branco<br>Morada do Sol, Indaiatuba - SP | CEP: 13348-070</p>", unsafe_allow_html=True)
 st.divider()
 
-# Cardápio completo com Hambúrguer Assado e Água de Coco com preços fixos
+# =========================================================================
+# 💰 INFORMAÇÕES DE PAGAMENTO E REGRAS DE TEMPO LIMEITE
+# =========================================================================
+st.sidebar.markdown("### 💰 Regras de Pagamento")
+st.sidebar.warning("⚠️ **PEDIDOS PARA RETIRADA:** O pagamento deve ser feito obrigatoriamente via **PIX** após gerar o seu Ticket.")
+st.sidebar.error("⏱️ **ATENÇÃO:** O pagamento via PIX é válido por até **5 minutos**. Caso o pagamento não seja confirmado dentro desse prazo, o pedido será **cancelado automaticamente**.")
+st.sidebar.info("""
+**Chave PIX (Celular):** 
+`19991692630`
+**Nome do Cobrador:** 
+Marcos Prado
+""")
+st.sidebar.success("💵 **Dinheiro e Débito:** Aceitos somente para compras feitas presencialmente no Trailer Branco.")
+# =========================================================================
+
+# Cardápio completo
 cardapio = {
     "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
     "Combinados": {
@@ -66,7 +81,7 @@ def disparar_email_producao(num_ticket, nome_cli, whats_cli, email_cli, hora_bus
     <p>--------------------------------------------------</p>
     <p><strong>📋 ITENS PARA PRODUÇÃO:</strong><br>{lista_formatada}</p>
     <p>--------------------------------------------------</p>
-    <p><strong>💰 VALOR TOTAL A COBRAR:</strong> R$ {total_pagar:.2f}</p>
+    <p><strong>💰 VALOR TOTAL A COBRAR:</strong> R$ {total_pagar:.2f} (Aguardando PIX em 5 min)</p>
     <p>📍 <strong>LOCAL DE RETIRADA:</strong> Trailer Branco (Morada do Sol, Indaiatuba - SP, 13348-070)</p>
     """
 
@@ -144,6 +159,9 @@ with col_cardapio:
 with col_carrinho:
     st.subheader("🛍️ Dados da Retirada")
     
+    # Alerta móvel reforçado com o tempo limite
+    st.error("⚠️ **Aviso Importante:** Pedidos para retirada aceitam apenas **PIX**. O pagamento deve ser feito em até **5 minutos** ou o pedido será cancelado.")
+    
     nome_cliente = st.text_input("Seu Nome:", placeholder="Ex: João Silva")
     whats_cliente = st.text_input("Seu WhatsApp com DDD (Obrigatório):", placeholder="Ex: 19999999999")
     email_cliente = st.text_input("Seu E-mail:", placeholder="Ex: cliente@email.com")
@@ -187,29 +205,3 @@ with col_carrinho:
                 numero_ticket = random.randint(100, 999)
                 hora_formatada = horario_busca.strftime("%H:%M")
                 
-                disparar_email_producao(numero_ticket, nome_cliente, whats_cliente, email_cliente, hora_formatada, st.session_state.carrinho, total_geral)
-                
-                st.session_state.ticket_gerado = {
-                    "numero": numero_ticket,
-                    "cliente": nome_cliente,
-                    "whats": whats_cliente,
-                    "email": email_cliente,
-                    "hora": hora_formatada,
-                    "total": total_geral
-                }
-                
-                st.session_state.carrinho = {}
-                st.rerun()
-
-# Painel do Ticket de confirmação exibido ao cliente de casa
-if st.session_state.ticket_gerado:
-    st.divider()
-    t = st.session_state.ticket_gerado
-    
-    st.subheader("🎟️ SEU PEDIDO FOI ENVIADO!")
-    st.info("Número do Ticket: #" + str(t['numero']))
-    st.write("**Cliente:** " + t['cliente'])
-    st.write("**WhatsApp do Cliente:** " + t['whats'])
-    st.write("**E-mail do Cliente:** " + t['email'])
-    st.write("**Horário agendado:** " + t['hora'] + "h")
-    
