@@ -216,7 +216,7 @@ with col_cardapio:
     
     with st.expander("👑 1) Pastéis Tradicionais - R$ 14,00"):
         for nome in cardapio["Tradicionais"]:
-            c1, c2 = st.columns([3, 1])
+            c1, c2 = st.columns(2)
             c1.write(f"**{nome}**")
             if c2.button("Selec.", key=f"simples_{nome}", kind="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
@@ -224,7 +224,7 @@ with col_cardapio:
 
     with st.expander("🌟 2) Pastéis Combinados"):
         for nome, preco in cardapio["Combinados"].items():
-            c1, c2 = st.columns([3, 1])
+            c1, c2 = st.columns(2)
             texto_preco = f"R$ {preco:.2f}".replace('.', ',')
             c1.write(f"**{nome}** — <span style='color:#d4af37;'>{texto_preco}</span>", unsafe_allow_html=True)
             if c2.button("Selec.", key=f"comb_{nome}", kind="secondary"):
@@ -233,3 +233,4 @@ with col_cardapio:
 
     with st.expander("💎 3) Pastéis Especiais"):
         for nome, preco in cardapio["Especiais"].items():
+            c1, c2 = st.columns(2)
