@@ -44,7 +44,7 @@ st.markdown("""
         box-shadow: 0 0 8px rgba(212, 175, 55, 0.4) !important;
     }
 
-    /* Botão Principal Doutado (Confirmar) */
+    /* Botão Principal Dourado (Confirmar) */
     .stButton>button[kind="primary"] {
         background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
         color: #000000 !important;
@@ -140,7 +140,7 @@ st.sidebar.markdown("<br>", unsafe_allow_html=True)
 st.sidebar.markdown("<h4 style='color: #aa7c11; margin-bottom:5px;'>Dados para Depósito</h4>", unsafe_allow_html=True)
 st.sidebar.code("Chave PIX: 19991692630\nFavorecido: Marcos Prado", language="text")
 
-# Cardápio completo premium
+# 📋 CARDÁPIO 100% COMPLETO (TODOS OS ITENS UNIFICADOS)
 cardapio = {
     "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
     "Combinados": {
@@ -216,7 +216,7 @@ with col_cardapio:
     
     with st.expander("👑 1) Pastéis Tradicionais - R$ 14,00"):
         for nome in cardapio["Tradicionais"]:
-            c1, c2 = st.columns(2) # CORRIGIDO AQUI: Adicionado o (2) faltante
+            c1, c2 = st.columns(2)
             c1.write(f"**{nome}**")
             if c2.button("Selec.", key=f"simples_{nome}", type="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
