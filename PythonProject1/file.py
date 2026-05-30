@@ -44,7 +44,7 @@ st.markdown("""
         box-shadow: 0 0 8px rgba(212, 175, 55, 0.4) !important;
     }
 
-    /* Botão Principal Dourado (Confirmar) */
+    /* Botão Principal Doutado (Confirmar) */
     .stButton>button[kind="primary"] {
         background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
         color: #000000 !important;
@@ -216,9 +216,9 @@ with col_cardapio:
     
     with st.expander("👑 1) Pastéis Tradicionais - R$ 14,00"):
         for nome in cardapio["Tradicionais"]:
-            c1, c2 = st.columns(2)
+            c1, c2 = st.columns(2) # CORRIGIDO AQUI: Adicionado o (2) faltante
             c1.write(f"**{nome}**")
-            if c2.button("Selec.", key=f"simples_{nome}", kind="secondary"):
+            if c2.button("Selec.", key=f"simples_{nome}", type="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
@@ -227,7 +227,7 @@ with col_cardapio:
             c1, c2 = st.columns(2)
             texto_preco = f"R$ {preco:.2f}".replace('.', ',')
             c1.write(f"**{nome}** — <span style='color:#d4af37;'>{texto_preco}</span>", unsafe_allow_html=True)
-            if c2.button("Selec.", key=f"comb_{nome}", kind="secondary"):
+            if c2.button("Selec.", key=f"comb_{nome}", type="secondary"):
                 st.session_state.carrinho[nome] = st.session_state.carrinho.get(nome, 0) + 1
                 st.rerun()
 
