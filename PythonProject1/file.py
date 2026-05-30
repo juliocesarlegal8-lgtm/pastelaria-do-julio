@@ -142,7 +142,7 @@ Dinheiro e Débito somente no balcão presencial do Trailer.
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 st.sidebar.code("CHAVE PIX (CELULAR):\n19991692630\n\nFAVORECIDO:\nMarcos Prado", language="text")
 
-# 📋 CARDÁPIO TOTALMENTE COMPLETO RECONSTITUÍDO
+# 📋 CARDÁPIO RECONSTITUÍDO COM TODOS OS ITENS COMPLETOS SEM CORTES
 cardapio = {
     "Tradicionais": ["Queijo", "Carne", "Frango", "Cheddar", "Calabresa"],
     "Combinados": {
